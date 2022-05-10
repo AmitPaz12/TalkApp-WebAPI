@@ -115,6 +115,7 @@ namespace WebApp.Services
         public bool UserExists(int id)
         {
             return _context.User.Any(e => e.Id == id);
+
         }
 
 
