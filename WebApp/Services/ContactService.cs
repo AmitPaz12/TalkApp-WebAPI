@@ -14,6 +14,7 @@ namespace WebApp.Services
             _context = context;
         }
 
+
         public async Task<Contact> GetContact(string id)
         {
             return await _context.Contact.FindAsync(id);

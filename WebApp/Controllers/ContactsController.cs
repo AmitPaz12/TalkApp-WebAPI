@@ -97,6 +97,7 @@ namespace WebApp.Controllers
                 expires: DateTime.UtcNow.AddMinutes(20),
                 signingCredentials: mac);*/
 
+
             contact.User = new User();
             contact.Messages = new List<Message>();
             contact.LastMessage = contact.Server;

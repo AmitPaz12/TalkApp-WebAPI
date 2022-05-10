@@ -15,5 +15,6 @@ namespace WebApp.Services
         public Task<int> PutContact(string id, Contact contact);
 
         public Task<int> DeleteContact(string id);
+
     }
 }
