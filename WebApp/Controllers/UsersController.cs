@@ -35,12 +35,12 @@ namespace WebApp.Controllers
         {
             if (await _service.CheckIfInDB(user.Name, user.Password))
             {
+                User fullUser = await _service.GetByName(user.Name);
                 var claims = new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, _configuration["JWTParams:Subject"]),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                    new Claim("UserId", user.Name)
+                    new Claim(ClaimTypes.NameIdentifier, fullUser.Id.ToString())
                 };
 
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTParams:SecretKey"]));
@@ -72,10 +72,9 @@ namespace WebApp.Controllers
             }
             var claims = new[]
             {
-                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["JWTParams:Subject"]),
                  new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                  new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                 new Claim("UserId", user.Name)
+                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                 };
 
 

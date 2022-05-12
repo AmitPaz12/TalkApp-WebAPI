@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using WebApp.Services;
@@ -21,20 +23,41 @@ namespace WebApp.Controllers
     public class ContactsController : ControllerBase
     {
         private IContactService _service;
+        private IUserService _userService;
+
         public IConfiguration _configuration;
 
-        public ContactsController(IContactService service, IConfiguration configuration)
+        public ContactsController(IContactService service, IUserService userService, IConfiguration configuration)
         {
             _service = service;
+            _userService = userService;
             _configuration = configuration;
         }
 
 
+
+
         // GET: api/Contacts
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Contact>>> GetContacts()
         {
-            return  await _service.GetAllContacts();
+            var currentUser = HttpContext.User;
+            string userID = null;
+            if (currentUser.HasClaim(c => c.Type == "UserId"))
+            {
+                userID = currentUser.Claims.FirstOrDefault(c => c.Type == "UserId").Value;
+            }
+            if (userID != null)
+            {
+                User user = await _userService.GetByID(Int16.Parse(userID));
+                if (user != null)
+                {
+                    return _service.GetContactsByUserID(Int16.Parse(userID)).ToList();
+                }
+                return BadRequest("didn't find user");
+            }
+            return BadRequest("no claim");
         }
 
         // GET: api/Contacts/5

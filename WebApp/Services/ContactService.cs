@@ -83,5 +83,15 @@ namespace WebApp.Services
         {
             return _context.Contact.Any(c => c.Id == id);
         }
+
+
+        public IQueryable<Contact> GetContactsByUserID(int id)
+        {
+            var contacts = from contact in _context.Contact
+                           where contact.User.Id == id
+                           select contact;
+
+            return contacts;
+        }
     }
 }

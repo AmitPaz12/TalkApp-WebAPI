@@ -16,5 +16,7 @@ namespace WebApp.Services
 
         public Task<int> DeleteContact(string id);
 
+        public IQueryable<Contact> GetContactsByUserID(int id);
+
     }
 }
