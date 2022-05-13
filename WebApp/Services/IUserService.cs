@@ -7,19 +7,17 @@ namespace WebApp.Services
 
         public Task<bool> CheckIfInDB(string name, string password);
 
-        public Task<User?> GetByID(int id);
-
         public Task<User?> GetByName(string name);
 
        // public List<Contact> GetAllContacts(string id);
 
         public Task<List<User>> GetAll();
 
-        public Task<int> PutUser(int id, User user);
+        public Task<int> PutUser(string name, User user);
 
-        public Task<int> DeleteUser(int id);
+        public Task<int> DeleteUser(string name);
 
-        public bool UserExists(int id);
+        public bool UserExists(string name);
 
 
 

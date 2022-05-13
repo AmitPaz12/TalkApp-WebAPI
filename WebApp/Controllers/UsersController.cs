@@ -39,9 +39,8 @@ namespace WebApp.Controllers
                 User fullUser = await _service.GetByName(user.Name);
                 var claims = new[]
                 {
-                    /*new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),*/
-                    new Claim(ClaimTypes.NameIdentifier, fullUser.Id.ToString()),
+                
+                    new Claim(ClaimTypes.NameIdentifier, fullUser.Name),
                 };
 
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTParams:SecretKey"]));
@@ -65,7 +64,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Post([Bind("Id, Name, Password, Display_name, Profile_pic, Contacts")] User user)
+        public async Task<IActionResult> PostUser([Bind("Name, Password, DisplayName, Contacts")] User user)
         {
             if (await _service.CheckIfInDB(user.Name, user.Password))
             {
@@ -75,7 +74,7 @@ namespace WebApp.Controllers
             {
                  new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                  new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                 new Claim(ClaimTypes.NameIdentifier, user.Name)
                 };
 
 
@@ -105,9 +104,9 @@ namespace WebApp.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUser(string id)
         {
-            var user = await _service.GetByID(id);
+            var user = await _service.GetByName(id);
 
             if (user == null)
             {
@@ -120,7 +119,7 @@ namespace WebApp.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(string id, User user)
         {
             int result = await _service.PutUser(id, user);
 
@@ -135,20 +134,10 @@ namespace WebApp.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        /*        [HttpPost]
-                public async Task<ActionResult<User>> PostUser(User user)
-                {
-                    _context.User.Add(user);
-                    await _context.SaveChangesAsync();
-
-                    return CreatedAtAction("GetUser", new { id = user.Id }, user);
-                }*/
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(string id)
         {
             int result = await _service.DeleteUser(id);
             if (result == -1)
@@ -158,9 +147,5 @@ namespace WebApp.Controllers
             return NoContent();
         }
 
-       /* public bool UserExists(int id)
-        {
-            return _service.UserExists(id);
-        }*/
     }
 }

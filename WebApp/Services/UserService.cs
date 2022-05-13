@@ -34,10 +34,10 @@ namespace WebApp.Services
             return await _context.User.ToListAsync();
         }
 
-        public async Task<User?> GetByID(int id)
+        public async Task<User?> GetByID(string name)
         {
             var users = await GetAll();
-            var user = users.Find(m => m.Id == id);
+            var user = users.Find(m => m.Name == name);
 
             return user;
         }
@@ -50,20 +50,10 @@ namespace WebApp.Services
             return user;
         }
 
-      /*  public async Task<List<Contact>> GetContacts(string name)
-        {
-            User? user = await GetByName(name);
-            if (user == null)
-            {
-                return new List<Contact>();
-            }
-            return user.Contacts;
-        }*/
 
-
-        public async Task<int> PutUser(int id, User user)
+        public async Task<int> PutUser(string name, User user)
         {
-            if (id != user.Id)
+            if (name != user.Name)
             {
                 return -1;
             }
@@ -76,7 +66,7 @@ namespace WebApp.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!UserExists(name))
                 {
                     return 0;
                 }
@@ -88,17 +78,7 @@ namespace WebApp.Services
             return 1;
         }
 
-
-        /*        public async Task<ActionResult<User>> PostUser(User user)
-                {
-                    _context.User.Add(user);
-                    await _context.SaveChangesAsync();
-
-                    return CreatedAtAction("GetUser", new { id = user.Id }, user);
-                }
-        */
-
-        public async Task<int> DeleteUser(int id)
+        public async Task<int> DeleteUser(string id)
         {
             var user = await _context.User.FindAsync(id);
             if (user == null)
@@ -112,9 +92,9 @@ namespace WebApp.Services
             return 1;
         }
 
-        public bool UserExists(int id)
+        public bool UserExists(string name)
         {
-            return _context.User.Any(e => e.Id == id);
+            return _context.User.Any(e => e.Name == name);
 
         }
 
