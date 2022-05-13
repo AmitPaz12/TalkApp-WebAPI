@@ -93,5 +93,14 @@ namespace WebApp.Services
 
             return contacts;
         }
+
+        public IQueryable<Message> GetMessagesByContact(Contact contact)
+        {
+            var messages = from message in _context.Message
+                           where message.Contact.Id == contact.Id
+                           select message;
+
+            return messages;
+        }
     }
 }

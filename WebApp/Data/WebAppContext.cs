@@ -19,5 +19,9 @@ namespace WebApp.Data
         public DbSet<WebApp.Models.User> User { get; set; }
 
         public DbSet<WebApp.Models.Contact> Contact { get; set; }
+
+        public DbSet<WebApp.Models.Message>? Message { get; set; }
+
+        public DbSet<WebApp.Models.Invitation>? Invitation { get; set; }
     }
 }

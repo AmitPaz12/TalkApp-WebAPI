@@ -18,5 +18,7 @@ namespace WebApp.Services
 
         public IQueryable<Contact> GetContactsByUserID(int id);
 
+        public IQueryable<Message> GetMessagesByContact(Contact contact);
+
     }
 }
