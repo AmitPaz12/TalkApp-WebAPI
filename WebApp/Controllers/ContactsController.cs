@@ -39,15 +39,15 @@ namespace WebApp.Controllers
         private async Task<User> getUser()
         {
             var currentUser = HttpContext.User;
-            string userID = null;
+            string userName = null;
             User user = null;
             if (currentUser.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
             {
-                userID = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                userName = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             }
-            if (userID != null)
+            if (userName != null)
             {
-                user = await _userService.GetByID(Int16.Parse(userID));
+                user = await _userService.GetByName(userName);
             }
             return user;
                 
@@ -61,7 +61,7 @@ namespace WebApp.Controllers
             User user = await getUser();
             if (user != null)
             {
-             return Ok(_contactService.GetContactsByUserID(user.Id).ToList());
+             return Ok(_contactService.GetContactsByUserName(user.Name).ToList());
             }
             return BadRequest("didn't find user");
         }
@@ -105,12 +105,14 @@ namespace WebApp.Controllers
         public async Task<ActionResult<Contact>> PostContact([Bind("Id, User, Name, Password, LastSeen, Server, LastMessage, Messages")] Contact contact)
         {
 
-/*            if (await _service.CheckIfInDB(contact.Id))
-            {
-                return NotFound("Contact already exist");
-            }*/
+            User user = await getUser();
 
-            contact.User = await getUser();
+            if (await _contactService.CheckIfInUserContacts(user.Name, contact.Id))
+            {
+                return BadRequest("Contact already exists");
+            }
+
+            contact.User = user;
             contact.Messages = new List<Message>();
             contact.LastMessage = contact.Server;
             contact.LastSeen = null;
@@ -131,14 +133,6 @@ namespace WebApp.Controllers
             }
             return NoContent();
         }
-
-        /*private bool ContactExists(int id)
-        {
-            return _context.Contact.Any(e => e.Id == id);
-        }*/
-
-
-
 
 
         // GET: api/Contact/5/Messages
