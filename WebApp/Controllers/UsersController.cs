@@ -13,6 +13,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Controllers
 {
@@ -29,7 +30,7 @@ namespace WebApp.Controllers
             _configuration = configuration;
         }
 
-
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Post([FromBody] UserLogin user)
         {
@@ -38,9 +39,9 @@ namespace WebApp.Controllers
                 User fullUser = await _service.GetByName(user.Name);
                 var claims = new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                    new Claim(ClaimTypes.NameIdentifier, fullUser.Id.ToString())
+                    /*new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),*/
+                    new Claim(ClaimTypes.NameIdentifier, fullUser.Id.ToString()),
                 };
 
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTParams:SecretKey"]));
