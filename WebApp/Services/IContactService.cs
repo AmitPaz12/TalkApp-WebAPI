@@ -16,9 +16,11 @@ namespace WebApp.Services
 
         public Task<int> DeleteContact(string id);
 
-        public IQueryable<Contact> GetContactsByUserID(int id);
+        public IQueryable<Contact> GetContactsByUserName(string name);
 
         public IQueryable<Message> GetMessagesByContact(Contact contact);
+
+        public Task<bool> CheckIfInUserContacts(string userName, string contactId);
 
     }
 }
