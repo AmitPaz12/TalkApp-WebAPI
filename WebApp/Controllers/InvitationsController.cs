@@ -37,7 +37,8 @@ namespace WebApp.Controllers
             {
                 return BadRequest("User does not exist");
             }
-            if (await _contactService.CheckIfInUserContacts(user.Name, invitation.From)) 
+
+            if (await _contactService.CheckIfInUserContacts(user.userName, invitation.From)) 
             {
                 return BadRequest("Contact already exists");
             }

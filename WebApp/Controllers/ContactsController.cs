@@ -107,7 +107,7 @@ namespace WebApp.Controllers
 
             User user = await getUser();
 
-            if (await _contactService.CheckIfInUserContacts(user.Name, contact.Id))
+            if (await _contactService.CheckIfInUserContacts(user.userName, contact.Id))
             {
                 return BadRequest("Contact already exists");
             }

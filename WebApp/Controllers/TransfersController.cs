@@ -41,7 +41,7 @@ namespace WebApp.Controllers
             }
             Contact contact = await _contactService.GetContact(transfer.From);
 
-            if (await _contactService.CheckIfInUserContacts(user.Name, transfer.From) == false)
+            if (await _contactService.CheckIfInUserContacts(user.userName, transfer.From) == false)
             {
                 return BadRequest("Contact not exists");
             }

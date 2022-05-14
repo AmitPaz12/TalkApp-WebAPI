@@ -32,7 +32,7 @@ namespace WebApp.Services
 
         public async Task<bool> CheckIfInUserContacts(string userName, string contactId)
         {
-            return await _context.Contact.AnyAsync(c => c.Id == contactId && c.User.Name == userName);
+            return await _context.Contact.AnyAsync(c => c.Id == contactId && c.User.userName == userName);
         }
 
         public async Task<bool> AddToDB(Contact contact)
@@ -93,7 +93,8 @@ namespace WebApp.Services
         public IQueryable<Contact> GetContactsByUserName(string name)
         {
             var contacts = from contact in _context.Contact
-                           where contact.User.Name == name
+                           where contact.User.userName == name
+
                            select contact;
 
             return contacts;

@@ -1,9 +1,13 @@
-﻿namespace WebApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApp.Models
 {
     public class UserLogin
     {
-        public string Name { get; set; }
+        [Required]
+        public string userName { get; set; }
 
-        public string Password { get; set; }
+        [Required]
+        public string password { get; set; }
     }
 }

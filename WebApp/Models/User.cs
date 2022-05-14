@@ -1,16 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+
 
 namespace WebApp.Models
 {
     public class User
     {
         [Key]
-        public string Name { get; set; }
-
-        public string Password { get; set; }
-
-        public string DisplayName { get; set; }
-
+        public string userName { get; set; }
+        [Required]
+        public string password { get; set; }
+        [Required]
+        public string displayName { get; set; }
+        
+        public string? profilePic { get; set; }
+        [IgnoreDataMember]
         public List<Contact>? Contacts { get; set; }
 
 

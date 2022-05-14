@@ -32,15 +32,14 @@ namespace WebApp.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Post([FromBody] UserLogin user)
+        public async Task<IActionResult> PostUser([FromBody] UserLogin user)
         {
-            if (await _service.CheckIfInDB(user.Name, user.Password))
+            if (await _service.CheckIfInDB(user.userName, user.password))
             {
-                User fullUser = await _service.GetByName(user.Name);
+                User fullUser = await _service.GetByName(user.userName);
                 var claims = new[]
                 {
-                
-                    new Claim(ClaimTypes.NameIdentifier, fullUser.Name),
+                    new Claim(ClaimTypes.NameIdentifier, fullUser.userName),
                 };
 
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTParams:SecretKey"]));
@@ -51,11 +50,15 @@ namespace WebApp.Controllers
                     claims,
                     expires: DateTime.UtcNow.AddMinutes(20),
                     signingCredentials: mac);
-
-                return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                UserToken userToken = new UserToken
+                {
+                    User = fullUser,
+                    Token = new JwtSecurityTokenHandler().WriteToken(token)
+                };
+                return Ok(userToken);
             }
 
-            if (await _service.GetByName(user.Name) != null)
+            if (await _service.GetByName(user.userName) != null)
             {
                 return BadRequest("Wrong password");
             }
@@ -64,9 +67,9 @@ namespace WebApp.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> PostUser([Bind("Name, Password, DisplayName, Contacts")] User user)
+        public async Task<IActionResult> PostUser([FromBody] User user)
         {
-            if (await _service.CheckIfInDB(user.Name, user.Password))
+            if (await _service.CheckIfInDB(user.userName, user.password))
             {
                 return BadRequest("Already registerd");
             }
@@ -74,7 +77,7 @@ namespace WebApp.Controllers
             {
                  new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                  new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                 new Claim(ClaimTypes.NameIdentifier, user.Name)
+                 new Claim(ClaimTypes.NameIdentifier, user.userName)
                 };
 
 
@@ -86,11 +89,15 @@ namespace WebApp.Controllers
                 claims,
                 expires: DateTime.UtcNow.AddMinutes(20),
                 signingCredentials: mac);
-
             user.Contacts = new List<Contact>();
             await _service.AddToDB(user);
 
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+            UserToken userToken = new UserToken
+            {
+                User = user,
+                Token = new JwtSecurityTokenHandler().WriteToken(token)
+            };
+            return Ok(userToken);
         }
 
 
@@ -113,7 +120,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            return user;
+            return Ok(user);
         }
 
         // PUT: api/Users/5
