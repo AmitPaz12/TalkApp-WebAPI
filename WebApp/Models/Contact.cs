@@ -1,4 +1,6 @@
-﻿namespace WebApp.Models
+﻿using System.Runtime.Serialization;
+
+namespace WebApp.Models
 {
     public class Contact
     {
@@ -15,6 +17,7 @@
 
         public string? LastMessage { get; set; }
 
+        [IgnoreDataMember]
         public List<Message>? Messages { get; set; }
 
 

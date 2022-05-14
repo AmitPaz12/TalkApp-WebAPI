@@ -32,6 +32,15 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<ActionResult<Invitation>> PostInvitation([Bind("Id, From, To, Server ")] Invitation invitation)
         {
+            User user = await _userService.GetByName(invitation.To);
+            if (user == null)
+            {
+                return BadRequest("User does not exist");
+            }
+            if (await _contactService.CheckIfInUserContacts(user.userName, invitation.From)) 
+            {
+                return BadRequest("Contact already exists");
+            }
             Contact contact = new Contact();
             contact.Id = invitation.From;
             contact.Name = invitation.From;

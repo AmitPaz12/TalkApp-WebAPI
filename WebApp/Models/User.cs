@@ -1,17 +1,20 @@
-﻿namespace WebApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+
+namespace WebApp.Models
 {
     public class User
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-
-        public string Password { get; set; }
-
-        public string Display_name { get; set; }
-
-        public string Profile_pic { get; set; }
-
-        public List<Contact> Contacts { get; set; }
+        [Key]
+        public string userName { get; set; }
+        [Required]
+        public string password { get; set; }
+        [Required]
+        public string displayName { get; set; }
+        
+        public string? profilePic { get; set; }
+        [IgnoreDataMember]
+        public List<Contact>? Contacts { get; set; }
 
 
     }

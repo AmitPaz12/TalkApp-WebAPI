@@ -25,7 +25,7 @@ namespace WebApp.Services
 
         public  async Task<bool> CheckIfInDB(string name, string password)
         {
-            return await _context.User.AnyAsync(e => e.Name == name && e.Password == password);
+            return await _context.User.AnyAsync(e => e.userName == name && e.password == password);
         }
 
 
@@ -37,7 +37,7 @@ namespace WebApp.Services
         public async Task<User?> GetByID(int id)
         {
             var users = await GetAll();
-            var user = users.Find(m => m.Id == id);
+            var user = users.Find(m => m.userName == name);
 
             return user;
         }
@@ -45,7 +45,7 @@ namespace WebApp.Services
         public async Task<User?> GetByName(string name)
         {
             var users = await GetAll();
-            var user = users.Find(m => m.Name == name);
+            var user = users.Find(m => m.userName == name);
 
             return user;
         }
@@ -63,7 +63,7 @@ namespace WebApp.Services
 
         public async Task<int> PutUser(int id, User user)
         {
-            if (id != user.Id)
+            if (name != user.userName)
             {
                 return -1;
             }
@@ -114,7 +114,7 @@ namespace WebApp.Services
 
         public bool UserExists(int id)
         {
-            return _context.User.Any(e => e.Id == id);
+            return _context.User.Any(e => e.userName == name);
 
         }
 

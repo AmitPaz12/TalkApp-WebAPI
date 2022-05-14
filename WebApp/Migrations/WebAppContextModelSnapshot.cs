@@ -39,12 +39,12 @@ namespace WebApp.Migrations
                     b.Property<string>("Server")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("userName")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("userName");
 
                     b.ToTable("Contact");
                 });
@@ -97,11 +97,28 @@ namespace WebApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Profile_pic")
+                    b.HasKey("Id");
+
+                    b.ToTable("Transfer");
+                });
+
+            modelBuilder.Entity("WebApp.Models.User", b =>
+                {
+                    b.Property<string>("userName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("displayName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("profilePic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("userName");
 
                     b.ToTable("User");
                 });
@@ -110,7 +127,7 @@ namespace WebApp.Migrations
                 {
                     b.HasOne("WebApp.Models.User", "User")
                         .WithMany("Contacts")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("userName");
 
                     b.Navigation("User");
                 });

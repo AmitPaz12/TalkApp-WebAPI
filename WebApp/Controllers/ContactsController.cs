@@ -61,7 +61,7 @@ namespace WebApp.Controllers
             User user = await getUser();
             if (user != null)
             {
-             return Ok(_contactService.GetContactsByUserID(user.Id).ToList());
+             return Ok(_contactService.GetContactsByUserName(user.Name).ToList());
             }
             return BadRequest("didn't find user");
         }
@@ -105,7 +105,9 @@ namespace WebApp.Controllers
         public async Task<ActionResult<Contact>> PostContact([Bind("Id, User, Name, Password, LastSeen, Server, LastMessage, Messages")] Contact contact)
         {
 
-/*            if (await _service.CheckIfInDB(contact.Id))
+            User user = await getUser();
+
+            if (await _contactService.CheckIfInUserContacts(user.userName, contact.Id))
             {
                 return NotFound("Contact already exist");
             }*/
