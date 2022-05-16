@@ -49,6 +49,31 @@ namespace WebApp.Migrations
                     b.ToTable("Contact");
                 });
 
+            modelBuilder.Entity("WebApp.Models.Invitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Server")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Invitation");
+                });
+
             modelBuilder.Entity("WebApp.Models.Message", b =>
                 {
                     b.Property<int>("Id")
@@ -77,7 +102,7 @@ namespace WebApp.Migrations
                     b.ToTable("Message");
                 });
 
-            modelBuilder.Entity("WebApp.Models.User", b =>
+            modelBuilder.Entity("WebApp.Models.Transfer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -85,15 +110,29 @@ namespace WebApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Display_name")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Transfer");
+                });
+
+            modelBuilder.Entity("WebApp.Models.User", b =>
+                {
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -127,7 +166,9 @@ namespace WebApp.Migrations
                 {
                     b.HasOne("WebApp.Models.User", "User")
                         .WithMany("Contacts")
+
                         .HasForeignKey("userName");
+
 
                     b.Navigation("User");
                 });

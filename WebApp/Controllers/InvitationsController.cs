@@ -37,6 +37,7 @@ namespace WebApp.Controllers
             {
                 return BadRequest("User does not exist");
             }
+
             if (await _contactService.CheckIfInUserContacts(user.userName, invitation.From)) 
             {
                 return BadRequest("Contact already exists");
@@ -44,9 +45,10 @@ namespace WebApp.Controllers
             Contact contact = new Contact();
             contact.Id = invitation.From;
             contact.Name = invitation.From;
-            contact.User = await _userService.GetByName(invitation.To);
+            contact.User = user;
             contact.Messages = new List<Message>();
-            contact.LastMessage = invitation.Server;
+            contact.Server = invitation.Server;
+            contact.LastMessage = null;
             contact.LastSeen = null;
 
             await _contactService.AddToDB(contact);

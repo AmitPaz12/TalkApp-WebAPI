@@ -90,10 +90,11 @@ namespace WebApp.Services
         }
 
 
-        public IQueryable<Contact> GetContactsByUserID(int id)
+        public IQueryable<Contact> GetContactsByUserName(string name)
         {
             var contacts = from contact in _context.Contact
                            where contact.User.userName == name
+
                            select contact;
 
             return contacts;

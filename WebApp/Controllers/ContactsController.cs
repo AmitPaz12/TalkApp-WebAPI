@@ -39,15 +39,15 @@ namespace WebApp.Controllers
         private async Task<User> getUser()
         {
             var currentUser = HttpContext.User;
-            string userID = null;
+            string userName = null;
             User user = null;
             if (currentUser.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
             {
-                userID = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                userName = currentUser.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             }
-            if (userID != null)
+            if (userName != null)
             {
-                user = await _userService.GetByID(Int16.Parse(userID));
+                user = await _userService.GetByName(userName);
             }
             return user;
                 
@@ -109,10 +109,10 @@ namespace WebApp.Controllers
 
             if (await _contactService.CheckIfInUserContacts(user.userName, contact.Id))
             {
-                return NotFound("Contact already exist");
-            }*/
+                return BadRequest("Contact already exists");
+            }
 
-            contact.User = await getUser();
+            contact.User = user;
             contact.Messages = new List<Message>();
             contact.LastMessage = contact.Server;
             contact.LastSeen = null;
@@ -133,14 +133,6 @@ namespace WebApp.Controllers
             }
             return NoContent();
         }
-
-        /*private bool ContactExists(int id)
-        {
-            return _context.Contact.Any(e => e.Id == id);
-        }*/
-
-
-
 
 
         // GET: api/Contact/5/Messages
