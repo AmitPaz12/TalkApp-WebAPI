@@ -61,7 +61,7 @@ namespace WebApp.Controllers
             User user = await getUser();
             if (user != null)
             {
-             return Ok(_contactService.GetContactsByUserName(user.Name).ToList());
+             return Ok(_contactService.GetContactsByUserName(user.userName).ToList());
             }
             return BadRequest("didn't find user");
         }

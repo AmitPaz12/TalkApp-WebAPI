@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApp.Migrations
 {
-    public partial class In : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -43,13 +43,14 @@ namespace WebApp.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    userName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    displayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    profilePic = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Name);
+                    table.PrimaryKey("PK_User", x => x.userName);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,7 +58,7 @@ namespace WebApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    userName = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastSeen = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Server = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -67,10 +68,10 @@ namespace WebApp.Migrations
                 {
                     table.PrimaryKey("PK_Contact", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Contact_User_UserName",
-                        column: x => x.UserName,
+                        name: "FK_Contact_User_userName",
+                        column: x => x.userName,
                         principalTable: "User",
-                        principalColumn: "Name");
+                        principalColumn: "userName");
                 });
 
             migrationBuilder.CreateTable(
@@ -95,9 +96,9 @@ namespace WebApp.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contact_UserName",
+                name: "IX_Contact_userName",
                 table: "Contact",
-                column: "UserName");
+                column: "userName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Message_ContactId",

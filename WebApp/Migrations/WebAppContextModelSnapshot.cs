@@ -129,20 +129,6 @@ namespace WebApp.Migrations
 
             modelBuilder.Entity("WebApp.Models.User", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Transfer");
-                });
-
-            modelBuilder.Entity("WebApp.Models.User", b =>
-                {
                     b.Property<string>("userName")
                         .HasColumnType("nvarchar(450)");
 
@@ -166,9 +152,7 @@ namespace WebApp.Migrations
                 {
                     b.HasOne("WebApp.Models.User", "User")
                         .WithMany("Contacts")
-
                         .HasForeignKey("userName");
-
 
                     b.Navigation("User");
                 });
