@@ -54,7 +54,7 @@ namespace WebApp.Controllers
 
             await _messagesService.AddToDB(message);
 
-            return CreatedAtAction("PostTransfer", new { id = contact.Id }, contact);
+            return CreatedAtAction("PostTransfer", new { id = message.Id }, message);
         }
 
     }

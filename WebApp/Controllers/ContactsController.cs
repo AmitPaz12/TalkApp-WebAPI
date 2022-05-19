@@ -68,6 +68,7 @@ namespace WebApp.Controllers
 
         // GET: api/Contacts/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Contact>> GetContact(string id)
         {
             var contact = await _contactService.GetContact(id);
@@ -114,7 +115,7 @@ namespace WebApp.Controllers
 
             contact.User = user;
             contact.Messages = new List<Message>();
-            contact.LastMessage = contact.Server;
+            contact.LastMessage = null;
             contact.LastSeen = null;
 
             await _contactService.AddToDB(contact);
@@ -124,6 +125,7 @@ namespace WebApp.Controllers
 
         // DELETE: api/Contacts/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteContact(string id)
         {
             int result = await _contactService.DeleteContact(id);
