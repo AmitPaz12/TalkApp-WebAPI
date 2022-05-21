@@ -2,13 +2,11 @@
 {
     public class Transfer
     {
-        public int Id { get; set; }
+        public string from { get; set; }
 
-        public string From { get; set; }
+        public string to { get; set; }
 
-        public string To { get; set; }
-
-        public string Content { get; set; }
+        public string content { get; set; }
 
     }
 }

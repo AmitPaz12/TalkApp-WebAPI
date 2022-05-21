@@ -1,21 +1,29 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace WebApp.Models
 {
     public class Contact
     {
-        //displayName
-        public string Id { get; set; }
+        [Key]
+        [IgnoreDataMember]
+        public int Identifier { get; set; }
 
+        //Name
+        [Required]
+        public string id { get; set; }
+
+        [IgnoreDataMember]
         public User? User { get; set; }
 
-        public string? Name { get; set; }
+        //displayName
+        public string name { get; set; }
 
-        public DateTime? LastSeen { get; set; }
+        public DateTime? lastdate { get; set; }
 
-        public string? Server { get; set; }
+        public string server { get; set; }
 
-        public string? LastMessage { get; set; }
+        public string? last { get; set; }
 
         [IgnoreDataMember]
         public List<Message>? Messages { get; set; }

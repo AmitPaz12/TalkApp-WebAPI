@@ -14,13 +14,13 @@ namespace WebApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InvitationsController : ControllerBase
+    public class invitationController : ControllerBase
     {
         private IContactService _contactService;
         private IUserService _userService;
 
 
-        public InvitationsController(IContactService contactService, IUserService userService)
+        public invitationController(IContactService contactService, IUserService userService)
         {
             _contactService = contactService;
             _userService = userService;
@@ -30,33 +30,35 @@ namespace WebApp.Controllers
         // POST: api/Invitations
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Invitation>> PostInvitation([Bind("Id, From, To, Server ")] Invitation invitation)
+        public async Task<ActionResult<Invitation>> PostInvitation([Bind("from, to, server")] Invitation invitation)
         {
-            User user = await _userService.GetByName(invitation.To);
-            if (user == null)
+            User userToAdd = await _userService.GetByName(invitation.from);
+            User currentUser = await _userService.GetByName(invitation.to);
+
+            if (currentUser == null)
             {
                 return BadRequest("User does not exist");
             }
 
-            if (await _contactService.CheckIfInUserContacts(user.userName, invitation.From)) 
+            if (await _contactService.CheckIfInUserContacts(invitation.to, invitation.from))
             {
                 return BadRequest("Contact already exists");
             }
             Contact contact = new Contact();
-            contact.Id = invitation.From;
-            contact.Name = invitation.From;
-            contact.User = user;
+            contact.id = invitation.from;
+            contact.name = userToAdd.displayName;
+            contact.User = currentUser;
             contact.Messages = new List<Message>();
-            contact.Server = invitation.Server;
-            contact.LastMessage = null;
-            contact.LastSeen = null;
+            contact.server = invitation.server;
+            contact.last = null;
+            contact.lastdate = null;
 
             await _contactService.AddToDB(contact);
 
-            return CreatedAtAction("PostInvitation", new { id = contact.Id }, contact);
+            return CreatedAtAction("PostInvitation", new { id = contact.Identifier }, contact);
 
         }
     }
 
-        
+
 }

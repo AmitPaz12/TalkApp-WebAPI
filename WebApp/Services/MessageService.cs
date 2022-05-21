@@ -14,7 +14,7 @@ namespace WebApp.Services
 
         public bool MessageExists(int id)
         {
-            return _context.Message.Any(c => c.Id == id);
+            return _context.Message.Any(c => c.id == id);
         }
 
         public async Task<List<Message>> GetMessages()
@@ -39,7 +39,7 @@ namespace WebApp.Services
 
         public async Task<int> PutMessage(int id, Message message)
         {
-            if (id != message.Id)
+            if (id != message.id)
             {
                 return -1;
             }

@@ -24,107 +24,66 @@ namespace WebApp.Migrations
 
             modelBuilder.Entity("WebApp.Models.Contact", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("LastMessage")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Identifier"), 1L, 1);
+
+                    b.Property<string>("id")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("LastSeen")
+                    b.Property<string>("last")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("lastdate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Server")
+                    b.Property<string>("server")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("userName")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Identifier");
 
                     b.HasIndex("userName");
 
                     b.ToTable("Contact");
                 });
 
-            modelBuilder.Entity("WebApp.Models.Invitation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("From")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Server")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("To")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Invitation");
-                });
-
             modelBuilder.Entity("WebApp.Models.Message", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<string>("ContactId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ContactIdentifier")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Content")
+                    b.Property<string>("content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("created")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("Sent")
+                    b.Property<bool>("sent")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
-                    b.HasIndex("ContactId");
+                    b.HasIndex("ContactIdentifier");
 
                     b.ToTable("Message");
-                });
-
-            modelBuilder.Entity("WebApp.Models.Transfer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("From")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("To")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Transfer");
                 });
 
             modelBuilder.Entity("WebApp.Models.User", b =>
@@ -161,7 +120,7 @@ namespace WebApp.Migrations
                 {
                     b.HasOne("WebApp.Models.Contact", "Contact")
                         .WithMany("Messages")
-                        .HasForeignKey("ContactId");
+                        .HasForeignKey("ContactIdentifier");
 
                     b.Navigation("Contact");
                 });
