@@ -4,7 +4,7 @@ namespace WebApp.Services
     public interface IContactService
     {
 
-        public Task<Contact> GetContact(string id);
+        public Task<Contact> GetContact(string userName, string id);
 
         public Task<List<Contact>> GetAllContacts();
 

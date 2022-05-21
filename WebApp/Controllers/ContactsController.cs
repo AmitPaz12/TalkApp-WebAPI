@@ -71,7 +71,8 @@ namespace WebApp.Controllers
         [Authorize]
         public async Task<ActionResult<Contact>> GetContact(string id)
         {
-            var contact = await _contactService.GetContact(id);
+            User user = await getUser();
+            var contact = await _contactService.GetContact(user.userName, id);
 
             if (contact == null)
             {
@@ -103,24 +104,24 @@ namespace WebApp.Controllers
         // POST: api/Contacts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Contact>> PostContact([Bind("Id, User, Name, Password, LastSeen, Server, LastMessage, Messages")] Contact contact)
+        public async Task<ActionResult<Contact>> PostContact([Bind("id, User, name, lastdate, server, last, Messages")] Contact contact)
         {
 
             User user = await getUser();
 
-            if (await _contactService.CheckIfInUserContacts(user.userName, contact.Id))
+            if (await _contactService.CheckIfInUserContacts(user.userName, contact.id))
             {
                 return BadRequest("Contact already exists");
             }
 
             contact.User = user;
             contact.Messages = new List<Message>();
-            contact.LastMessage = null;
-            contact.LastSeen = null;
+            contact.last = null;
+            contact.lastdate = null;
 
             await _contactService.AddToDB(contact);
 
-            return CreatedAtAction("PostContact", new { id = contact.Id }, contact);
+            return CreatedAtAction("PostContact", new { id = contact.Identifier }, contact);
         }
 
         // DELETE: api/Contacts/5
@@ -142,7 +143,8 @@ namespace WebApp.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessages(string id)
         {
-            Contact contact = await _contactService.GetContact(id);
+            User user = await getUser();
+            Contact contact = await _contactService.GetContact(user.userName, id);
             return Ok(_contactService.GetMessagesByContact(contact));
         }
 
@@ -167,7 +169,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> PutMessage(int id2, Message newMessage)
         {
             Message message = await _messagesService.GetMessage(id2);
-            message.Content = newMessage.Content;
+            message.content = newMessage.content;
             int result = await _messagesService.PutMessage(id2, message);
 
             if (result == -1)
@@ -185,15 +187,16 @@ namespace WebApp.Controllers
         // POST: api/Contacts/5/Messages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("{id}/Messages")]
-        public async Task<ActionResult<Message>> PostMessage(string id, [Bind("Id, Content, CreatedDate, Sent, Contact")] Message message)
+        public async Task<ActionResult<Message>> PostMessage(string id, [Bind("id, content, created, sent, Contact")] Message message)
         {
-            message.Contact = await _contactService.GetContact(id);
-            message.CreatedDate = DateTime.Now;
-            message.Sent = false;
+            User user = await getUser();
+            message.Contact = await _contactService.GetContact(user.userName, id);
+            message.created = DateTime.Now;
+            message.sent = true;
 
             await _messagesService.AddToDB(message);
 
-            return CreatedAtAction("PostMessage", new { id = message.Id }, message);
+            return CreatedAtAction("PostMessage", new { id = message.id }, message);
         }
 
         // DELETE: api/Contacts/5/Messages/5

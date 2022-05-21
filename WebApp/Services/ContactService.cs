@@ -15,9 +15,9 @@ namespace WebApp.Services
         }
 
 
-        public async Task<Contact> GetContact(string id)
+        public async Task<Contact> GetContact(string userName, string id)
         {
-            return await _context.Contact.FindAsync(id);
+            return await _context.Contact.FirstOrDefaultAsync(c => c.id.Equals(id) && c.User.userName.Equals(userName));
         }
 
         public async Task<List<Contact>> GetAllContacts()
@@ -25,14 +25,14 @@ namespace WebApp.Services
             return await _context.Contact.ToListAsync();
         }
 
-        public async Task<bool> CheckIfInDB(string id)
+        public async Task<bool> CheckIfInDB(string name)
         {
-            return await _context.Contact.AnyAsync(c => c.Id == id);
+            return await _context.Contact.AnyAsync(c => c.id == name);
         }
 
-        public async Task<bool> CheckIfInUserContacts(string userName, string contactId)
+        public async Task<bool> CheckIfInUserContacts(string userName, string contactName)
         {
-            return await _context.Contact.AnyAsync(c => c.Id == contactId && c.User.userName == userName);
+            return await _context.Contact.AnyAsync(c => c.id.Equals(contactName) && c.User.userName.Equals(userName));
         }
 
         public async Task<bool> AddToDB(Contact contact)
@@ -43,9 +43,9 @@ namespace WebApp.Services
             return true;
         }
 
-        public async Task<int> PutContact(string id, Contact contact)
+        public async Task<int> PutContact(string name, Contact contact)
         {
-            if (id != contact.Id)
+            if (name != contact.id)
             {
                 return -1;
             }
@@ -58,7 +58,7 @@ namespace WebApp.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ContactExists(id))
+                if (!ContactExists(name))
                 {
                     return 0;
                 }
@@ -70,9 +70,9 @@ namespace WebApp.Services
             return 1;
         }
 
-        public async Task<int> DeleteContact(string id)
+        public async Task<int> DeleteContact(string name)
         {
-            var contact = await _context.Contact.FindAsync(id);
+            var contact = await _context.Contact.FindAsync(name);
             if (contact == null)
             {
                 return -1;
@@ -84,9 +84,9 @@ namespace WebApp.Services
             return 1;
         }
 
-        public bool ContactExists(string id)
+        public bool ContactExists(string name)
         {
-            return _context.Contact.Any(c => c.Id == id);
+            return _context.Contact.Any(c => c.id == name);
         }
 
 
@@ -103,7 +103,7 @@ namespace WebApp.Services
         public IQueryable<Message> GetMessagesByContact(Contact contact)
         {
             var messages = from message in _context.Message
-                           where message.Contact.Id == contact.Id
+                           where message.Contact.id == contact.id
                            select message;
 
             return messages;
