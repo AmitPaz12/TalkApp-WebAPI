@@ -37,8 +37,8 @@ namespace WebApp.Migrations
                     b.Property<string>("last")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("lastdate")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan?>("lastdate")
+                        .HasColumnType("time");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -73,8 +73,8 @@ namespace WebApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("created")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("created")
+                        .HasColumnType("time");
 
                     b.Property<bool>("sent")
                         .HasColumnType("bit");

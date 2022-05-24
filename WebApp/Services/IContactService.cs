@@ -14,6 +14,10 @@ namespace WebApp.Services
 
         public Task<int> PutContact(string id, Contact contact);
 
+        public Task<int> UpdateLastDate(TimeSpan time, Contact contact);
+
+        public Task<int> UpdateLastMessage(string content, Contact contact);
+
         public Task<int> DeleteContact(string id);
 
         public IQueryable<Contact> GetContactsByUserName(string name);

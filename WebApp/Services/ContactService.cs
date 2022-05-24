@@ -70,6 +70,18 @@ namespace WebApp.Services
             return 1;
         }
 
+        public async Task<int> UpdateLastDate(TimeSpan time, Contact contact)
+        {
+            contact.lastdate = time;
+
+            _context.Entry(contact).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return 1;
+
+        }
+
         public async Task<int> DeleteContact(string name)
         {
             var contact = await _context.Contact.FindAsync(name);
@@ -107,6 +119,18 @@ namespace WebApp.Services
                            select message;
 
             return messages;
+        }
+
+        public async Task<int> UpdateLastMessage(string content, Contact contact)
+        {
+            contact.last = content;
+
+            _context.Entry(contact).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return 1;
+
         }
     }
 }
