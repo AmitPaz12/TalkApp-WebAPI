@@ -10,8 +10,7 @@ namespace WebApp.Models
         public int Identifier { get; set; }
 
         //Name
-        [Required]
-        public string id { get; set; }
+        public string? id { get; set; }
 
         [IgnoreDataMember]
         public User? User { get; set; }
@@ -19,11 +18,11 @@ namespace WebApp.Models
         //displayName
         public string name { get; set; }
 
-        public TimeSpan? lastdate { get; set; }
-
         public string server { get; set; }
 
         public string? last { get; set; }
+
+        public TimeSpan? lastdate { get; set; }
 
         [IgnoreDataMember]
         public List<Message>? Messages { get; set; }

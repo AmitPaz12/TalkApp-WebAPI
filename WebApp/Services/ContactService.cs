@@ -43,9 +43,9 @@ namespace WebApp.Services
             return true;
         }
 
-        public async Task<int> PutContact(string name, Contact contact)
+        public async Task<int> PutContact(string id, Contact contact)
         {
-            if (name != contact.id)
+            if (id != contact.id)
             {
                 return -1;
             }
@@ -58,7 +58,7 @@ namespace WebApp.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ContactExists(name))
+                if (!ContactExists(id))
                 {
                     return 0;
                 }
@@ -82,9 +82,9 @@ namespace WebApp.Services
 
         }
 
-        public async Task<int> DeleteContact(string name)
+        public async Task<int> DeleteContact(int identifier)
         {
-            var contact = await _context.Contact.FindAsync(name);
+            var contact = await _context.Contact.FindAsync(identifier);
             if (contact == null)
             {
                 return -1;
