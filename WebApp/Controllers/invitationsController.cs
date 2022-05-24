@@ -15,14 +15,14 @@ namespace WebApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class invitationController : ControllerBase
+    public class invitationsController : ControllerBase
     {
         private IContactService _contactService;
         private IUserService _userService;
         private ContactHub _contactHub;
 
 
-        public invitationController(IContactService contactService, IUserService userService, ContactHub contactHub)
+        public invitationsController(IContactService contactService, IUserService userService, ContactHub contactHub)
         {
             _contactService = contactService;
             _userService = userService;

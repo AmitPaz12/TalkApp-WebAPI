@@ -23,7 +23,7 @@ namespace WebApp.Hubs
             if (connection == null)
                 return;
 
-            var connectionId = _connections[connection]; 
+            var connectionId = _connections[connection];
             await Clients.Client(connectionId).SendAsync("ReceiveMessage", new MessagePost
             {
                 id = message.id,

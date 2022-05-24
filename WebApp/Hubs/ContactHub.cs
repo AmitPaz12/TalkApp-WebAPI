@@ -15,22 +15,42 @@ namespace WebApp.Hubs
 
         public async Task AddContact(string userName, Contact contact)
         {
-            var connectionId = _connections[userName];
-            await Clients.Client(connectionId).SendAsync("ReceiveContact", new ContactPost
+            try
             {
-                id = contact.id,
-                last = contact.last,
-                lastdate = contact.lastdate,
-                name = contact.name,
-                server = contact.server
-            }
+                var connectionId = _connections[userName];
+                await Clients.Client(connectionId).SendAsync("ReceiveContact", new ContactPost
+                {
+                    id = contact.id,
+                    last = contact.last,
+                    lastdate = contact.lastdate,
+                    name = contact.name,
+                    server = contact.server
+                }
             );
+            }
+            catch (Exception ex)
+            {
+                return;
+
+            }
+
         }
 
         public async Task ContactUpdate(string userName, Contact contact)
         {
-            var connectionId = _connections[userName];
-            await Clients.Client(connectionId).SendAsync("ContactUpdate", contact.id);
+            try
+            {
+                var connectionId = _connections[userName];
+                await Clients.Client(connectionId).SendAsync("ContactUpdate", contact.id);
+            }
+            catch (Exception ex)
+            {
+                return;
+
+            }
+
+            
+
         }
 
         public async Task ConnectClientToChat(string userConnection)

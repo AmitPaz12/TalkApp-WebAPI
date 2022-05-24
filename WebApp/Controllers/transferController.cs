@@ -65,8 +65,24 @@ namespace WebApp.Controllers
 
             await _messagesService.AddToDB(message);
             await _contactService.UpdateLastMessage(message.content, contact);
-            await _messagesHub.AddMessage(message, transfer.from, transfer.to);
-            await _contactHub.ContactUpdate(currentUser.userName, contact);
+            try
+            {
+                await _messagesHub.AddMessage(message, transfer.from, transfer.to);
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction();
+            }
+
+            try
+            {
+                await _contactHub.ContactUpdate(currentUser.userName, contact);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction();
+            }
+            
 
             return CreatedAtAction("PostTransfer", new { id = message.id }, message);
         }

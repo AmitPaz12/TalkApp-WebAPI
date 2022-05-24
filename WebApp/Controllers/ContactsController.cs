@@ -21,14 +21,14 @@ namespace WebApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ContactsController : ControllerBase
+    public class contactsController : ControllerBase
     {
         private IContactService _contactService;
         private IUserService _userService;
         private IMessageService _messagesService;
         public IConfiguration _configuration;
 
-        public ContactsController(IContactService service, IUserService userService, IMessageService messagesService, IConfiguration configuration)
+        public contactsController(IContactService service, IUserService userService, IMessageService messagesService, IConfiguration configuration)
         {
             _contactService = service;
             _userService = userService;
@@ -86,9 +86,14 @@ namespace WebApp.Controllers
         // PUT: api/Contacts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutContact(string id, Contact contact)
         {
-            int result = await _contactService.PutContact(id, contact);
+            contact.id = id;
+            User user = await getUser();
+            Contact c = await _contactService.GetContact(user.userName, id);
+            c.name = contact.name;
+            int result = await _contactService.PutContact(id, c);
 
             if (result == -1)
             {
@@ -120,7 +125,7 @@ namespace WebApp.Controllers
             contact.User = user;
             contact.Messages = new List<Message>();
             contact.last = null;
-            contact.lastdate = time;
+            contact.lastdate = null;
 
             await _contactService.AddToDB(contact);
 
@@ -132,7 +137,9 @@ namespace WebApp.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteContact(string id)
         {
-            int result = await _contactService.DeleteContact(id);
+            User user = await getUser();
+            Contact c = await _contactService.GetContact(user.userName, id);
+            int result = await _contactService.DeleteContact(c.Identifier);
             if (result == -1)
             {
                 return NotFound();
