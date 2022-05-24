@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using WebApp.Models;
 using WebApp.Services;
+using WebApp.Hubs;
 
 namespace WebApp.Controllers
 {
@@ -19,12 +20,18 @@ namespace WebApp.Controllers
         private IContactService _contactService;
         private IUserService _userService;
         private IMessageService _messagesService;
+        private MessagesHub _messagesHub;
+        private ContactHub _contactHub;
 
-        public transferController(IContactService service, IUserService userService, IMessageService messagesService)
+
+        public transferController(IContactService service, IUserService userService, IMessageService messagesService, MessagesHub messgaesHub, ContactHub contactHub)
         {
             _contactService = service;
             _userService = userService;
             _messagesService = messagesService;
+            _messagesHub = messgaesHub;
+            _contactHub = contactHub;
+
         }
 
 
@@ -34,7 +41,6 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<ActionResult<Transfer>> PostTransfer([Bind("id, from, to, content ")] Transfer transfer)
         {
-            User userToAdd = await _userService.GetByName(transfer.from);
             User currentUser = await _userService.GetByName(transfer.to);
             if (currentUser == null)
             {
@@ -48,13 +54,19 @@ namespace WebApp.Controllers
                 return BadRequest("Contact not exists");
             }
 
+            TimeSpan now = DateTime.Now.TimeOfDay;
+            TimeSpan time = new TimeSpan(now.Hours, now.Minutes, 0);
+
             Message message = new Message();
             message.content = transfer.content;
-            message.created = DateTime.Now;
+            message.created = time;
             message.sent = false;
             message.Contact = contact;
 
             await _messagesService.AddToDB(message);
+            await _contactService.UpdateLastMessage(message.content, contact);
+            await _messagesHub.AddMessage(message, transfer.from, transfer.to);
+            await _contactHub.ContactUpdate(currentUser.userName, contact);
 
             return CreatedAtAction("PostTransfer", new { id = message.id }, message);
         }

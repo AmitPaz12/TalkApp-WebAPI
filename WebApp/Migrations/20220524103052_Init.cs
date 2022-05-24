@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApp.Migrations
 {
-    public partial class _3 : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,7 +32,7 @@ namespace WebApp.Migrations
                     id = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     userName = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    lastdate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    lastdate = table.Column<TimeSpan>(type: "time", nullable: true),
                     server = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     last = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -53,7 +53,7 @@ namespace WebApp.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    created = table.Column<TimeSpan>(type: "time", nullable: false),
                     sent = table.Column<bool>(type: "bit", nullable: false),
                     ContactIdentifier = table.Column<int>(type: "int", nullable: true)
                 },

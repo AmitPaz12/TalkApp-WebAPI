@@ -6,8 +6,9 @@ using WebApp.Data;
 using WebApp.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
+using WebApp.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +19,14 @@ builder.Services.AddDbContext<WebAppContext>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddSingleton<IDictionary<UserConnect, string>>(opts => new Dictionary<UserConnect, string>());
+builder.Services.AddSingleton<IDictionary<string, string>>(opts => new Dictionary<string, string>());
+builder.Services.AddSingleton<MessagesHub>();
+builder.Services.AddSingleton<ContactHub>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSignalR();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthentication(opt => {
@@ -49,14 +55,19 @@ builder.Services.AddCors(options =>
             builder
             .AllowAnyOrigin()
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .WithOrigins("http://localhost:3000");
         });
+
 });
 
 builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
+
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -73,5 +84,11 @@ app.UseCors("CORSPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ContactHub>("/api/contactHub");
+    endpoints.MapHub<MessagesHub>("/api/messageHub");
+});
 
 app.Run();

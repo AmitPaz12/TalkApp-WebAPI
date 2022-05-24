@@ -12,8 +12,8 @@ using WebApp.Data;
 namespace WebApp.Migrations
 {
     [DbContext(typeof(WebAppContext))]
-    [Migration("20220519212247_3")]
-    partial class _3
+    [Migration("20220524103052_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,8 +39,8 @@ namespace WebApp.Migrations
                     b.Property<string>("last")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("lastdate")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan?>("lastdate")
+                        .HasColumnType("time");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -75,8 +75,8 @@ namespace WebApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("created")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("created")
+                        .HasColumnType("time");
 
                     b.Property<bool>("sent")
                         .HasColumnType("bit");

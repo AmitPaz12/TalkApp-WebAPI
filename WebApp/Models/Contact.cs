@@ -19,7 +19,7 @@ namespace WebApp.Models
         //displayName
         public string name { get; set; }
 
-        public DateTime? lastdate { get; set; }
+        public TimeSpan? lastdate { get; set; }
 
         public string server { get; set; }
 

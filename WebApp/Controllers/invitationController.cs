@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using WebApp.Models;
 using WebApp.Services;
+using WebApp.Hubs;
 
 namespace WebApp.Controllers
 {
@@ -18,12 +19,14 @@ namespace WebApp.Controllers
     {
         private IContactService _contactService;
         private IUserService _userService;
+        private ContactHub _contactHub;
 
 
-        public invitationController(IContactService contactService, IUserService userService)
+        public invitationController(IContactService contactService, IUserService userService, ContactHub contactHub)
         {
             _contactService = contactService;
             _userService = userService;
+            _contactHub = contactHub;
         }
 
 
@@ -32,7 +35,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<ActionResult<Invitation>> PostInvitation([Bind("from, to, server")] Invitation invitation)
         {
-            User userToAdd = await _userService.GetByName(invitation.from);
+            //User userToAdd = await _userService.GetByName(invitation.from);
             User currentUser = await _userService.GetByName(invitation.to);
 
             if (currentUser == null)
@@ -44,16 +47,21 @@ namespace WebApp.Controllers
             {
                 return BadRequest("Contact already exists");
             }
+
+            TimeSpan now = DateTime.Now.TimeOfDay;
+            TimeSpan time = new TimeSpan(now.Hours, now.Minutes, 0);
+
             Contact contact = new Contact();
             contact.id = invitation.from;
-            contact.name = userToAdd.displayName;
+            contact.name = invitation.from;
             contact.User = currentUser;
             contact.Messages = new List<Message>();
             contact.server = invitation.server;
             contact.last = null;
-            contact.lastdate = null;
+            contact.lastdate = time;
 
             await _contactService.AddToDB(contact);
+            await _contactHub.AddContact(invitation.to, contact);
 
             return CreatedAtAction("PostInvitation", new { id = contact.Identifier }, contact);
 

@@ -15,6 +15,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using WebApp.Hubs;
 
 namespace WebApp.Controllers
 {
@@ -114,10 +115,12 @@ namespace WebApp.Controllers
                 return BadRequest("Contact already exists");
             }
 
+            TimeSpan now = DateTime.Now.TimeOfDay;
+            TimeSpan time = new TimeSpan(now.Hours, now.Minutes, 0);
             contact.User = user;
             contact.Messages = new List<Message>();
             contact.last = null;
-            contact.lastdate = null;
+            contact.lastdate = time;
 
             await _contactService.AddToDB(contact);
 
@@ -189,12 +192,16 @@ namespace WebApp.Controllers
         [HttpPost("{id}/Messages")]
         public async Task<ActionResult<Message>> PostMessage(string id, [Bind("id, content, created, sent, Contact")] Message message)
         {
+            TimeSpan now = DateTime.Now.TimeOfDay;
+            TimeSpan time = new TimeSpan(now.Hours, now.Minutes, now.Seconds);
             User user = await getUser();
             message.Contact = await _contactService.GetContact(user.userName, id);
-            message.created = DateTime.Now;
+            message.created = time;
             message.sent = true;
 
             await _messagesService.AddToDB(message);
+            await _contactService.UpdateLastDate(message.created, message.Contact);
+            await _contactService.UpdateLastMessage(message.content, message.Contact);
 
             return CreatedAtAction("PostMessage", new { id = message.id }, message);
         }
