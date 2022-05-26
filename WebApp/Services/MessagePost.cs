@@ -8,6 +8,6 @@ namespace WebApp.Services
         public int id { get; set; }
         public string content { get; set; }
         public bool sent { get; set; }
-        public TimeSpan? date { get; set; }
+        public DateTime? date { get; set; }
     }
 }

@@ -199,11 +199,9 @@ namespace WebApp.Controllers
         [HttpPost("{id}/Messages")]
         public async Task<ActionResult<Message>> PostMessage(string id, [Bind("id, content, created, sent, Contact")] Message message)
         {
-            TimeSpan now = DateTime.Now.TimeOfDay;
-            TimeSpan time = new TimeSpan(now.Hours, now.Minutes, now.Seconds);
             User user = await getUser();
             message.Contact = await _contactService.GetContact(user.userName, id);
-            message.created = time;
+            message.created = DateTime.Now;
             message.sent = true;
 
             await _messagesService.AddToDB(message);

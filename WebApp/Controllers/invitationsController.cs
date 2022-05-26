@@ -48,9 +48,6 @@ namespace WebApp.Controllers
                 return BadRequest("Contact already exists");
             }
 
-            TimeSpan now = DateTime.Now.TimeOfDay;
-            TimeSpan time = new TimeSpan(now.Hours, now.Minutes, 0);
-
             Contact contact = new Contact();
             contact.id = invitation.from;
             contact.name = invitation.from;
@@ -58,7 +55,7 @@ namespace WebApp.Controllers
             contact.Messages = new List<Message>();
             contact.server = invitation.server;
             contact.last = null;
-            contact.lastdate = time;
+            contact.lastdate = null;
 
             await _contactService.AddToDB(contact);
             await _contactHub.AddContact(invitation.to, contact);

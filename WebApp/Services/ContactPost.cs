@@ -6,6 +6,6 @@
         public string name { get; set; }
         public string server { get; set; }
         public string? last { get; set; }
-        public TimeSpan? lastdate { get; set; }
+        public DateTime? lastdate { get; set; }
     }
 }
