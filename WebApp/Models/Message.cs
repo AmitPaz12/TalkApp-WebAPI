@@ -12,7 +12,7 @@ namespace WebApp.Models
         public string content { get; set; }
 
         [Required]
-        public TimeSpan created { get; set; }
+        public DateTime created { get; set; }
 
         [Required]
         public bool sent { get; set; }

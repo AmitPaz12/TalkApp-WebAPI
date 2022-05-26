@@ -54,12 +54,9 @@ namespace WebApp.Controllers
                 return BadRequest("Contact not exists");
             }
 
-            TimeSpan now = DateTime.Now.TimeOfDay;
-            TimeSpan time = new TimeSpan(now.Hours, now.Minutes, 0);
-
             Message message = new Message();
             message.content = transfer.content;
-            message.created = time;
+            message.created = DateTime.Now;
             message.sent = false;
             message.Contact = contact;
 

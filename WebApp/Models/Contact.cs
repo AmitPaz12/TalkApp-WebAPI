@@ -22,7 +22,7 @@ namespace WebApp.Models
 
         public string? last { get; set; }
 
-        public TimeSpan? lastdate { get; set; }
+        public DateTime? lastdate { get; set; }
 
         [IgnoreDataMember]
         public List<Message>? Messages { get; set; }
