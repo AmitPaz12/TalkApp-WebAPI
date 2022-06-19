@@ -38,7 +38,7 @@ namespace WebApp.Services
         public async Task<User?> GetByName(string name)
         {
             var users = await GetAll();
-            var user = users.Find(m => m.userName == name);
+            var user = users.Find(m => m.userName.Equals(name));
 
             return user;
         }

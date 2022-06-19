@@ -70,7 +70,7 @@ namespace WebApp.Services
             return 1;
         }
 
-        public async Task<int> UpdateLastDate(DateTime time, Contact contact)
+        public async Task<int> UpdateLastDate(string time, Contact contact)
         {
             contact.lastdate = time;
 
