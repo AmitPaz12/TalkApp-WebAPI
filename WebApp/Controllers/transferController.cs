@@ -56,7 +56,7 @@ namespace WebApp.Controllers
 
             Message message = new Message();
             message.content = transfer.content;
-            message.created = DateTime.Now;
+            message.created = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
             message.sent = false;
             message.Contact = contact;
 

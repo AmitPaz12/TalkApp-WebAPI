@@ -12,8 +12,8 @@ using WebApp.Data;
 namespace WebApp.Migrations
 {
     [DbContext(typeof(WebAppContext))]
-    [Migration("20220524103052_Init")]
-    partial class Init
+    [Migration("20220614090700_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,14 +33,13 @@ namespace WebApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Identifier"), 1L, 1);
 
                     b.Property<string>("id")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("last")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan?>("lastdate")
-                        .HasColumnType("time");
+                    b.Property<DateTime?>("lastdate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -75,8 +74,8 @@ namespace WebApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("created")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("created")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("sent")
                         .HasColumnType("bit");

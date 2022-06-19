@@ -62,6 +62,7 @@ namespace WebApp.Controllers
             User user = await getUser();
             if (user != null)
             {
+                List<Contact> l = _contactService.GetContactsByUserName(user.userName).ToList();
              return Ok(_contactService.GetContactsByUserName(user.userName).ToList());
             }
             return BadRequest("didn't find user");
@@ -107,7 +108,7 @@ namespace WebApp.Controllers
 
         }
 
-        // POST: api/Contacts
+        // POST: api/contacts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Contact>> PostContact([Bind("id, User, name, lastdate, server, last, Messages")] Contact contact)
@@ -201,7 +202,7 @@ namespace WebApp.Controllers
         {
             User user = await getUser();
             message.Contact = await _contactService.GetContact(user.userName, id);
-            message.created = DateTime.Now;
+            message.created = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
             message.sent = true;
 
             await _messagesService.AddToDB(message);

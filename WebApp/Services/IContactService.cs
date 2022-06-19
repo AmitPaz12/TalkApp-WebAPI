@@ -14,7 +14,7 @@ namespace WebApp.Services
 
         public Task<int> PutContact(string id, Contact contact);
 
-        public Task<int> UpdateLastDate(DateTime time, Contact contact);
+        public Task<int> UpdateLastDate(string time, Contact contact);
 
         public Task<int> UpdateLastMessage(string content, Contact contact);
 
