@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 
 namespace WebApp.Models
@@ -16,6 +17,9 @@ namespace WebApp.Models
         public string? profilePic { get; set; }
         [IgnoreDataMember]
         public List<Contact>? Contacts { get; set; }
+
+        [IgnoreDataMember]
+        public List<AndroidDeviceIDModel>? DeviceIDs { get; set; }
 
 
     }

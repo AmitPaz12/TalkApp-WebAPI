@@ -22,5 +22,7 @@ namespace WebApp.Data
 
         public DbSet<WebApp.Models.Message>? Message { get; set; }
 
+        public DbSet<WebApp.Models.AndroidDeviceIDModel>? AndroidDeviceIDModel { get; set; }
+
     }
 }

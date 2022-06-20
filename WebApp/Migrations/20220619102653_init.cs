@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -34,7 +33,7 @@ namespace WebApp.Migrations
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     server = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     last = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    lastdate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    lastdate = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -53,7 +52,7 @@ namespace WebApp.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    created = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     sent = table.Column<bool>(type: "bit", nullable: false),
                     ContactIdentifier = table.Column<int>(type: "int", nullable: true)
                 },

@@ -11,6 +11,8 @@ using WebApp.Models;
 using WebApp.Services;
 using WebApp.Hubs;
 
+
+
 namespace WebApp.Controllers
 {
     [Route("api/[controller]")]
@@ -22,16 +24,17 @@ namespace WebApp.Controllers
         private IMessageService _messagesService;
         private MessagesHub _messagesHub;
         private ContactHub _contactHub;
+        private INotificationService _notification;
 
 
-        public transferController(IContactService service, IUserService userService, IMessageService messagesService, MessagesHub messgaesHub, ContactHub contactHub)
+        public transferController(IContactService service, IUserService userService, IMessageService messagesService, MessagesHub messgaesHub, ContactHub contactHub, INotificationService notification)
         {
             _contactService = service;
             _userService = userService;
             _messagesService = messagesService;
             _messagesHub = messgaesHub;
             _contactHub = contactHub;
-
+            _notification = notification;
         }
 
 
@@ -61,6 +64,9 @@ namespace WebApp.Controllers
             message.Contact = contact;
 
             await _messagesService.AddToDB(message);
+
+            await _notification.SendNotification(message, transfer.to);
+
             await _contactService.UpdateLastMessage(message.content, contact);
             try
             {

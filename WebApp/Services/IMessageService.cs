@@ -1,7 +1,9 @@
 ﻿using WebApp.Models;
 
+
 namespace WebApp.Services
 {
+
     public interface IMessageService
     {
         public Task<List<Message>> GetMessages();
