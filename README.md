@@ -10,9 +10,15 @@ A Web Service project for a chat application "TalkApp".
 
 Clone the project.
 
+In Terminal:
+
+Add-Migration init
+
+update-database
+
 ## Information
 
-we created a web service for our application according to the instructions.
+A Web Service for our Android Application.
 
 
 [//]: # (head-end)
