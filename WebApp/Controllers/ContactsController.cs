@@ -27,13 +27,15 @@ namespace WebApp.Controllers
         private IUserService _userService;
         private IMessageService _messagesService;
         public IConfiguration _configuration;
+        public INotificationService _notificationService;
 
-        public contactsController(IContactService service, IUserService userService, IMessageService messagesService, IConfiguration configuration)
+        public contactsController(IContactService service, IUserService userService, IMessageService messagesService, IConfiguration configuration, INotificationService notificationService)
         {
             _contactService = service;
             _userService = userService;
             _messagesService = messagesService;
             _configuration = configuration;
+            _notificationService = notificationService;
         }
 
 
@@ -222,6 +224,25 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             return NoContent();
+        }
+
+        [Authorize]
+        [HttpPost("registerDevice")]
+        public async Task<IActionResult> registerDevice(AndroidDeviceIDModel androidDeviceIDModel)
+        {
+            var user = await getUser();
+            if (user == null)
+            {
+                return NotFound("Invalid details");
+            }
+
+            var androidDeviceID = new AndroidDeviceIDModel
+            {
+                DeviceId = androidDeviceIDModel.DeviceId
+            };
+
+            await _notificationService.CreateAndoridDeviceOfUser(androidDeviceID, user.userName);
+            return Ok();
         }
 
     }
