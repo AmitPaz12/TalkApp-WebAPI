@@ -11,8 +11,8 @@ namespace WebApp.Models
         [Required]
         public string content { get; set; }
 
-        [Required]
-        public string created { get; set; }
+        
+        public string? created { get; set; }
 
         [Required]
         public bool sent { get; set; }

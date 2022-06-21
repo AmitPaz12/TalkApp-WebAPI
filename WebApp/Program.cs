@@ -5,13 +5,22 @@ using Microsoft.Extensions.DependencyInjection;
 using WebApp.Data;
 using WebApp.Services;
 using Microsoft.IdentityModel.Tokens;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.SignalR;
 using WebApp.Hubs;
 using FirebaseAdmin;
+using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
-
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using CorePush.Google;
+using CorePush.Apple;
+using System.Configuration;
+using WebApp.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,12 +36,13 @@ builder.Services.AddSingleton<IDictionary<string, string>>(opts => new Dictionar
 builder.Services.AddSingleton<MessagesHub>();
 builder.Services.AddSingleton<ContactHub>();
 
+builder.Services.AddControllers();
+builder.Services.AddTransient<INotificationService, NotificationService>();
 var defaultApp = FirebaseApp.Create(new AppOptions()
 {
     Credential = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "key.json")),
 });
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSignalR();
