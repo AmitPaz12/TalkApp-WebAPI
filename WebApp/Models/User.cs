@@ -18,9 +18,5 @@ namespace WebApp.Models
         [IgnoreDataMember]
         public List<Contact>? Contacts { get; set; }
 
-        [IgnoreDataMember]
-        public List<AndroidDeviceIDModel>? DeviceIDs { get; set; }
-
-
     }
 }
