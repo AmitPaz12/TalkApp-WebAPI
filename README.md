@@ -4,7 +4,7 @@
 
 [//]: # (head-end)
 
-A Web Service project for a chat application "TalkApp".
+TalkApp is an open-source team collaboration Real-Time Ready Chat App written with React, ASP.NET & SQL Database.
 
 ## Running locally
 
@@ -16,14 +16,18 @@ Add-Migration init
 
 update-database
 
-## Information
+## Stage of development:
+- Currently the project is in development state so far a full react client is functional
+- ASP.NET Web API has been added with Entity framework supported, with a support to SQLite DB.
 
-A Web Service for our Android Application.
+- ## API - CALLS
+![image](https://user-images.githubusercontent.com/92247226/170540386-3395ad69-9a99-4731-819f-f57f466d00b7.png)
+![image](https://user-images.githubusercontent.com/92247226/170540413-b3bcbdcb-81e5-49bb-b6b8-177220935ea1.png)
 
-## Note
-Hey, We had a problem with the repositories, we found out in the day after we submitted the repository of ex3, that we worked on the repository of the ex2, so we had to fork the repository and create new one so you will be able to check our project correctly
-We sent an email to Yotam and he said that it's ok and just write about it in the readme so you'll know that we finish in time the exercise and the last commits are for the the forks and organize the code so nothing won't be wrong
-Thank you for checking our App :)
+ ## Technologies
+* [ASP.NET - WebAPI](https://github.com/facebook/react)
+* [ASP.NET - JWToken](https://github.com/facebook/react)
+* [ASP.NET - SIGNALR](https://dotnet.microsoft.com/en-us/apps/aspnet)
 
 
 [//]: # (head-end)
